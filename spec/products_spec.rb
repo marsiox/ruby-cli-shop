@@ -5,8 +5,8 @@ RSpec.describe Product do
   describe '#display_products' do
     let(:product_hash) do
       [
-        { sku: 'abc123', name: 'Banana', price: '$33.22' },
-        { sku: 'def456', name: 'Apple', price: '$10.50' }
+        { sku: 'abc123', name: 'Banana', price: 33.22 },
+        { sku: 'def456', name: 'Apple', price: 10.50 }
       ]
     end
 

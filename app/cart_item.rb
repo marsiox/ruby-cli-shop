@@ -1,5 +1,5 @@
 class CartItem
-  attr_reader :product, :quantity
+  attr_accessor :product, :quantity
 
   def initialize(product, quantity = 1)
     @product = product

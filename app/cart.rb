@@ -1,9 +1,21 @@
 class Cart
+  attr_reader :items
+
   def initialize
-    @products = []
+    @items = []
   end
 
-  def add_product(product)
-    @products << product
+  def add_item(product, quantity = 1)
+    existing_item = @items.find { |item| item.product.sku == product.sku }
+
+    if existing_item
+      existing_item.quantity += quantity
+    else
+      @items << CartItem.new(product, quantity)
+    end
+  end
+
+  def total_price
+    @items.sum(&:total_price)
   end
 end

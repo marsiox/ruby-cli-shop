@@ -1,0 +1,18 @@
+{
+  "currency": "EUR",
+  "discount-rules": {
+    "GR1": {
+      "name": "second-item-free"
+    },
+    "CF1": {
+        "name": "total-percentage-discount",
+        "quantity": 3,
+        "value": 33.3333333333
+    },
+    "SR1": {
+      "name": "single-price-discount",
+      "quantity": 3,
+      "value": 4.50
+    }
+  }
+}

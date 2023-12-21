@@ -1,5 +1,8 @@
 {
-  "currency": "EUR",
+  "currency": {
+    "name": "EUR",
+    "symbol": "€"
+  },
   "discount-rules": {
     "GR1": {
       "name": "second-item-free"

@@ -4,9 +4,10 @@ require "csv"
 require "json"
 require_relative "app/product"
 require_relative "app/cart"
+require_relative "app/configuration"
 
 def main(args)
-  load_config
+  @config = Configuration.config
   load_products
 
   cart = Cart.new(@config["discount-rules"])
@@ -39,11 +40,6 @@ def load_products
   CSV.foreach("data/products.csv", headers: true) do |row|
     @products << Product.new(row[0], row[1], row[2].to_f)
   end
-end
-
-def load_config
-  config_file = File.read("config.json")
-  @config = JSON.parse(config_file)
 end
 
 main(ARGV)

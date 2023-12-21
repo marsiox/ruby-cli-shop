@@ -1,3 +1,4 @@
+require_relative 'configuration'
 require_relative 'cart_item'
 
 class Cart
@@ -9,6 +10,7 @@ class Cart
   QTY_WIDTH = 4
 
   def initialize(discount_rules = {})
+    @config = Configuration.config
     @discount = 0
     @discount_rules = discount_rules
     @items = []
@@ -39,7 +41,6 @@ class Cart
       return unless rule
 
       case rule["name"]
-
       when "second-item-free"
         free_items_count = (item.quantity / 2).floor
         @discount += item.product.price * free_items_count
@@ -63,9 +64,9 @@ class Cart
   def checkout
     calculate_discount
     print_items
-    puts "\nTotal price: #{total_price}"
-    puts "Discount: #{total_discount}"
-    puts "Final price: #{total_price - total_discount}"
+    puts "\nTotal price: #{format_price(total_price)}"
+    puts "Discount: #{format_price(total_discount)}"
+    puts "Final price: #{format_price(total_price - total_discount)}"
   end
 
   def print_items
@@ -74,8 +75,14 @@ class Cart
     items.each do |item|
       puts item.product.sku.ljust(SKU_WIDTH) + \
      item.product.name.ljust(NAME_WIDTH) + \
-     item.product.price.to_s.ljust(PRICE_WIDTH) + \
+     format_price(item.product.price).ljust(PRICE_WIDTH) + \
      item.quantity.to_s.ljust(QTY_WIDTH)
     end
+  end
+
+  def format_price(price)
+    currency_symbol = @config["currency"]["symbol"]
+    formatted_price = '%.2f' % price
+    "#{currency_symbol}#{formatted_price}"
   end
 end

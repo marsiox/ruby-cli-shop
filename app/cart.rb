@@ -9,10 +9,9 @@ class Cart
   PRICE_WIDTH = 8
   QTY_WIDTH = 4
 
-  def initialize(discount_rules = {})
+  def initialize
     @config = Configuration.config
     @discount = 0
-    @discount_rules = discount_rules
     @items = []
   end
 
@@ -27,18 +26,25 @@ class Cart
   end
 
   def total_price
-    (items.sum(&:total_price) - @discount).round(2)
+    items.sum(&:total_price).round(2)
   end
 
   def total_discount
     @discount.round(2)
   end
 
+  def final_price
+    (total_price - total_discount).round(2)
+  end
+
   def calculate_discount
+    discount_rules = @config["discount-rules"]
+
     items.each do |item|
-      rule = @discount_rules[item.product.sku]
-      qty_rule = rule["quantity"].to_i
+      rule = discount_rules[item.product.sku]
       return unless rule
+
+      qty_rule = rule["quantity"].to_i
 
       case rule["name"]
       when "second-item-free"
@@ -47,7 +53,6 @@ class Cart
         next
 
       when "total-percentage-discount"
-
         if item.quantity >= qty_rule
           @discount += item.total_price * rule["value"].to_f / 100
         end
@@ -61,12 +66,11 @@ class Cart
     end
   end
 
-  def checkout
-    calculate_discount
+  def print_checkout
     print_items
     puts "\nTotal price: #{format_price(total_price)}"
     puts "Discount: #{format_price(total_discount)}"
-    puts "Final price: #{format_price(total_price - total_discount)}"
+    puts "Final price: #{format_price(final_price)}"
   end
 
   def print_items
@@ -74,9 +78,9 @@ class Cart
 
     items.each do |item|
       puts item.product.sku.ljust(SKU_WIDTH) + \
-     item.product.name.ljust(NAME_WIDTH) + \
-     format_price(item.product.price).ljust(PRICE_WIDTH) + \
-     item.quantity.to_s.ljust(QTY_WIDTH)
+        item.product.name.ljust(NAME_WIDTH) + \
+        format_price(item.product.price).ljust(PRICE_WIDTH) + \
+        item.quantity.to_s.ljust(QTY_WIDTH)
     end
   end
 

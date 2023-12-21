@@ -33,21 +33,25 @@ RSpec.describe Cart do
     it 'calculates quantities and total price' do
       expect(cart.items[0].quantity).to eq(2)
       expect(cart.items[1].quantity).to eq(1)
-      expect(cart.total_price).to eq(11.22)
+      expect(cart.final_price).to eq(11.22)
     end
   end
 
   describe '#discount_rules' do
-  # config format: { sku: { name: 'rule-name', quantity: 3, value: 10 } }
+    # config format: { sku: { name: 'rule-name', quantity: 3, value: 10 } }
     let(:discount_rules) {
       {
         "GR1" => { "name" => "second-item-free" },
-        "SR1" => { "name" => "single-price-discount", "quantity" => 3, "value" => 4.50 },
-        "CF1" => { "name" => "total-percentage-discount", "quantity" => 3, "value" => 33.3333333333 }
+        "CF1" => { "name" => "total-percentage-discount", "quantity" => 3, "value" => 33.3333333333 },
+        "SR1" => { "name" => "single-price-discount", "quantity" => 3, "value" => 4.50 }
       }
     }
 
-    let(:cart) { Cart.new(discount_rules) }
+    before do
+      allow(Configuration).to receive(:config).and_return({ "discount-rules" => discount_rules })
+    end
+
+    let(:cart) { Cart.new }
 
     context 'buy one get one free' do
       before do
@@ -57,7 +61,7 @@ RSpec.describe Cart do
       end
 
       it 'calculates total price with discount' do
-        expect(cart.total_price).to eq(3.11)
+        expect(cart.final_price).to eq(3.11)
       end
     end
 
@@ -71,7 +75,7 @@ RSpec.describe Cart do
       end
 
       it 'calculates total price with discount' do
-        expect(cart.total_price).to eq(16.61)
+        expect(cart.final_price).to eq(16.61)
       end
     end
 
@@ -86,7 +90,7 @@ RSpec.describe Cart do
       end
 
       it 'calculates total price with discount' do
-        expect(cart.total_price).to eq(30.57)
+        expect(cart.final_price).to eq(30.57)
       end
     end
   end

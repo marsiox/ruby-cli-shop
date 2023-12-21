@@ -4,13 +4,11 @@ require "csv"
 require "json"
 require_relative "app/product"
 require_relative "app/cart"
-require_relative "app/configuration"
 
 def main(args)
-  @config = Configuration.config
   load_products
 
-  cart = Cart.new(@config["discount-rules"])
+  cart = Cart.new
 
   loop do
     print "Enter SKU (or 'exit'): "
@@ -32,7 +30,9 @@ def main(args)
   end
 
   puts "Checkout..."
-  cart.checkout
+  puts "-------------------------------"
+  cart.calculate_discount
+  cart.print_checkout
 end
 
 def load_products

@@ -44,22 +44,17 @@ class Cart
       rule = discount_rules[item.product.sku]
       return unless rule
 
-      qty_rule = rule["quantity"].to_i
+      if item.quantity >= rule["quantity"].to_i
+        case rule["name"]
+        when "buy-quantity-get-value-free"
+          @discount += item.product.price * rule["value"].to_f
+          next
 
-      case rule["name"]
-      when "second-item-free"
-        free_items_count = (item.quantity / 2).floor
-        @discount += item.product.price * free_items_count
-        next
-
-      when "total-percentage-discount"
-        if item.quantity >= qty_rule
+        when "percentage-discount"
           @discount += item.total_price * rule["value"].to_f / 100
-        end
-        next
+          next
 
-      when "single-price-discount"
-        if item.quantity >= qty_rule
+        when "price-discount"
           @discount += (item.product.price - rule["value"].to_f) * item.quantity
         end
       end

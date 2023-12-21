@@ -41,9 +41,9 @@ RSpec.describe Cart do
     # config format: { sku: { name: 'rule-name', quantity: 3, value: 10 } }
     let(:discount_rules) {
       {
-        "GR1" => { "name" => "second-item-free" },
-        "CF1" => { "name" => "total-percentage-discount", "quantity" => 3, "value" => 33.3333333333 },
-        "SR1" => { "name" => "single-price-discount", "quantity" => 3, "value" => 4.50 }
+        "GR1" => { "name" => "buy-quantity-get-value-free", "quantity" => 2, "value" => 1 },
+        "CF1" => { "name" => "percentage-discount", "quantity" => 3, "value" => 33.3333333333 },
+        "SR1" => { "name" => "price-discount", "quantity" => 3, "value" => 4.50 }
       }
     }
 

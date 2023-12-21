@@ -5,15 +5,17 @@
   },
   "discount-rules": {
     "GR1": {
-      "name": "second-item-free"
+      "name": "buy-quantity-get-value-free",
+      "quantity": 2,
+      "value": 1
     },
     "CF1": {
-        "name": "total-percentage-discount",
+        "name": "percentage-discount",
         "quantity": 3,
         "value": 33.3333333333
     },
     "SR1": {
-      "name": "single-price-discount",
+      "name": "price-discount",
       "quantity": 3,
       "value": 4.50
     }

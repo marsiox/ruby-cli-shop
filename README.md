@@ -9,12 +9,15 @@ bundle
 ## Configuration
 Configuration file `config.json` contains the currency and discount rules for specified SKUs.
 
+## Extending discounts
+Discount calculations are specified in separate classes in `app/discount` folder. To add a new rule you need to create a new class, require it in the `Cart` class and append the rule in `config.json`, where the name of the rule has to match created class name.
+
 ## DB
 Sample database is located in `data/products.csv`
 
 ## Execution
 This app runs in a command line. Start the program with `./start.sh` and follow the instructions. You need to input product SKUs one by one to simulate the scan. 
-After entering all SKUs type 'exit'. That will simulate checkout and apply discounts defined in config. The discounted price is represented by **Final price**.
+After entering all SKUs type 'exit'. That will simulate checkout and apply discounts. The discounted price is represented by **Final price**.
 <br/><br/>Here is the example flow:
 ```
 ./start.sh
@@ -31,6 +34,7 @@ Enter SKU (or 'exit'): CF1
 Scanned: CF1
 Enter SKU (or 'exit'): exit
 Checkout...
+-------------------------------
 SKU  NAME           PRICE   QTY
 GR1  Green Tea      €3.11   1
 CF1  Coffee         €11.23  3

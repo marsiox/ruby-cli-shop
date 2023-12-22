@@ -1,5 +1,9 @@
 require_relative 'configuration'
 require_relative 'cart_item'
+require_relative 'discount/base_discount'
+require_relative 'discount/get_some_free_discount'
+require_relative 'discount/percentage_discount'
+require_relative 'discount/price_discount'
 
 class Cart
   attr_reader :items, :total_price
@@ -37,7 +41,7 @@ class Cart
     (total_price - total_discount).round(2)
   end
 
-  def calculate_discount
+  def apply_discounts
     discount_rules = @config["discount-rules"]
 
     items.each do |item|
@@ -45,18 +49,9 @@ class Cart
       return unless rule
 
       if item.quantity >= rule["quantity"].to_i
-        case rule["name"]
-        when "buy-quantity-get-value-free"
-          @discount += item.product.price * rule["value"].to_f
-          next
-
-        when "percentage-discount"
-          @discount += item.total_price * rule["value"].to_f / 100
-          next
-
-        when "price-discount"
-          @discount += (item.product.price - rule["value"].to_f) * item.quantity
-        end
+        klass = Object.const_get(rule["name"])
+        discount = klass.new(item, rule).apply
+        @discount += discount
       end
     end
   end

@@ -31,7 +31,7 @@ def main(args)
 
   puts "Checkout..."
   puts "-------------------------------"
-  cart.calculate_discount
+  cart.apply_discounts
   cart.print_checkout
 end
 

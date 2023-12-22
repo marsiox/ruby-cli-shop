@@ -41,9 +41,9 @@ RSpec.describe Cart do
     # config format: { sku: { name: 'rule-name', quantity: 3, value: 10 } }
     let(:discount_rules) {
       {
-        "GR1" => { "name" => "buy-quantity-get-value-free", "quantity" => 2, "value" => 1 },
-        "CF1" => { "name" => "percentage-discount", "quantity" => 3, "value" => 33.3333333333 },
-        "SR1" => { "name" => "price-discount", "quantity" => 3, "value" => 4.50 }
+        "GR1" => { "name" => "GetSomeFreeDiscount", "quantity" => 2, "value" => 1 },
+        "CF1" => { "name" => "PercentageDiscount", "quantity" => 3, "value" => 33.3333333333 },
+        "SR1" => { "name" => "PriceDiscount", "quantity" => 3, "value" => 4.50 }
       }
     }
 
@@ -57,7 +57,7 @@ RSpec.describe Cart do
       before do
         cart.add_item(gr1)
         cart.add_item(gr1)
-        cart.calculate_discount
+        cart.apply_discounts
       end
 
       it 'calculates total price with discount' do
@@ -71,7 +71,7 @@ RSpec.describe Cart do
         cart.add_item(sr1)
         cart.add_item(gr1)
         cart.add_item(sr1)
-        cart.calculate_discount
+        cart.apply_discounts
       end
 
       it 'calculates total price with discount' do
@@ -86,7 +86,7 @@ RSpec.describe Cart do
         cart.add_item(sr1)
         cart.add_item(cf1)
         cart.add_item(cf1)
-        cart.calculate_discount
+        cart.apply_discounts
       end
 
       it 'calculates total price with discount' do
